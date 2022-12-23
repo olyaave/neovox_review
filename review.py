@@ -1,6 +1,6 @@
 def authorize_order(client: (str, int), items: [(str, int)]): -> dict:
     # Абстрактное решение тут
-		person: Person = get_person(*client)
+	  person: Person = get_person(*client)
     checked_items = {i: person.can_buy(get_item(i)) for i in items}
     return checked_items
     
