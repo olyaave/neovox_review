@@ -17,7 +17,7 @@ def get_item_from_db(item_type: str, item_id: int):
     ...
 
 
-def get_reciept_from_db(person_id: int, item_id: int):
+def get_recipe_from_db(person_id: int, item_id: int):
     ...
 
 
@@ -33,7 +33,7 @@ class ItemTypeEnum(Enum, str):
 
 
 def is_recipe_exist(person_id: int, item_id: int) -> bool:
-    return get_reciept_from_db(person_id, item_id) is not None
+    return get_recipe_from_db(person_id, item_id) is not None
 
 
 def is_specially_allowed(person, item):
@@ -53,13 +53,13 @@ class ClientPermission(Permission):
             return True
         if isinstance(item, SpecialItem):
             return False
-        if isinstance(item, RecieptItem):
+        if isinstance(item, RecipeItem):
             return is_recipe_exist(person_id, item.id)
 
 
 class DoctorPermission(Permission):
     def can_buy(self, person_id, item) -> bool:
-        if isinstance(item, (CommonItem, RecieptItem)):
+        if isinstance(item, (CommonItem, RecipeItem)):
             return True
         if isinstance(item, SpecialItem):
             return is_specially_allowed((PersonTypeEnum.doctor, person_id), item)
@@ -74,7 +74,7 @@ def get_person(person_type: str, person_id: int):
 def get_item(item_name, item_id):
     items = {ItemTypeEnum.common_item: CommonItem,
              ItemTypeEnum.special_item: SpecialItem,
-             ItemTypeEnum.receipt_item: RecieptItem}
+             ItemTypeEnum.receipt_item: RecipeItem}
     return items[ItemTypeEnum(item_name)](item_id)
 
 
@@ -88,7 +88,7 @@ class CommonItem(Item):
         super().__init__(id)
 
 
-class RecieptItem(Item):
+class RecipeItem(Item):
     def __init__(self, id: int):
         super().__init__(id)
 
